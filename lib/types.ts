@@ -10,6 +10,7 @@ export interface Album {
   runnersUp: string[]
   coverImage: string
   dateAdded: string
+  tracks?: string[]
 }
 
 export type SortOption =

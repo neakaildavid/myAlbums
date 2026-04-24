@@ -1,11 +1,12 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Album } from '@/lib/types'
-import { getAlbumById } from '@/lib/storage'
+import { getAlbumById, updateAlbum, deleteAlbum } from '@/lib/storage'
 import AlbumImage from '@/components/AlbumImage'
+import EditAlbumModal from '@/components/EditAlbumModal'
 
 const fadeUp = {
   initial: { opacity: 0, y: 18 },
@@ -14,15 +15,29 @@ const fadeUp = {
 
 export default function AlbumDetailPage() {
   const params = useParams()
+  const router = useRouter()
   const id = params.id as string
   const [album, setAlbum] = useState<Album | null>(null)
   const [mounted, setMounted] = useState(false)
+  const [editOpen, setEditOpen] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   useEffect(() => {
     setMounted(true)
     const found = getAlbumById(id)
     setAlbum(found ?? null)
   }, [id])
+
+  function handleSave(updated: Album) {
+    updateAlbum(updated)
+    setAlbum(updated)
+    setEditOpen(false)
+  }
+
+  function handleDelete() {
+    deleteAlbum(id)
+    router.push('/')
+  }
 
   if (!mounted) {
     return (
@@ -64,7 +79,7 @@ export default function AlbumDetailPage() {
 
       <div className="relative z-10">
         {/* Nav bar */}
-        <nav className="max-w-screen-xl mx-auto px-6 md:px-12 pt-8 pb-0">
+        <nav className="max-w-screen-xl mx-auto px-6 md:px-12 pt-8 pb-0 flex items-center justify-between">
           <Link
             href="/"
             className="inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-warm-500 hover:text-warm-800 transition-colors duration-200"
@@ -72,6 +87,41 @@ export default function AlbumDetailPage() {
             <span>←</span>
             <span>RECORD</span>
           </Link>
+
+          <div className="flex items-center gap-5">
+            {confirmDelete ? (
+              <>
+                <span className="font-mono text-[11px] text-warm-500">remove this album?</span>
+                <button
+                  onClick={handleDelete}
+                  className="font-mono text-[11px] text-red-400 hover:text-red-600 transition-colors"
+                >
+                  yes, remove
+                </button>
+                <button
+                  onClick={() => setConfirmDelete(false)}
+                  className="font-mono text-[11px] text-warm-400 hover:text-warm-700 transition-colors"
+                >
+                  cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => setEditOpen(true)}
+                  className="font-mono text-[11px] text-warm-400 hover:text-warm-800 transition-colors"
+                >
+                  edit
+                </button>
+                <button
+                  onClick={() => setConfirmDelete(true)}
+                  className="font-mono text-[11px] text-warm-400 hover:text-red-400 transition-colors"
+                >
+                  remove
+                </button>
+              </>
+            )}
+          </div>
         </nav>
 
         {/* Main content */}
@@ -209,6 +259,51 @@ export default function AlbumDetailPage() {
                 </motion.div>
               )}
 
+              {/* Track list */}
+              {album.tracks && album.tracks.length > 0 && (
+                <motion.div
+                  {...fadeUp}
+                  transition={{ duration: 0.55, delay: 0.48, ease: [0.25, 0.1, 0.25, 1] }}
+                  className="mt-10 pt-8 border-t border-warm-200"
+                >
+                  <p className="font-mono text-[9px] tracking-[0.1em] text-warm-400 mb-5">
+                    tracklist
+                  </p>
+                  <ol className="space-y-2">
+                    {album.tracks.map((track, i) => {
+                      const isFav = album.favoriteSong?.toLowerCase() === track.toLowerCase()
+                      const isRunner = album.runnersUp?.some(
+                        (r) => r.toLowerCase() === track.toLowerCase()
+                      )
+                      return (
+                        <li key={i} className="flex items-center gap-4 group">
+                          <span className="font-mono text-[10px] text-warm-300 w-5 shrink-0 text-right tabular-nums">
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
+                          <span
+                            className={`font-mono text-[12px] flex-1 ${
+                              isFav
+                                ? 'text-accent'
+                                : isRunner
+                                ? 'text-warm-700'
+                                : 'text-warm-500'
+                            }`}
+                          >
+                            {track}
+                          </span>
+                          {isFav && (
+                            <span className="font-mono text-[10px] text-accent shrink-0">♡</span>
+                          )}
+                          {isRunner && !isFav && (
+                            <span className="font-mono text-[10px] text-warm-400 shrink-0">·</span>
+                          )}
+                        </li>
+                      )
+                    })}
+                  </ol>
+                </motion.div>
+              )}
+
               {/* Date added — mobile */}
               <p className="md:hidden font-mono text-[10px] text-warm-300 mt-10">
                 Added{' '}
@@ -222,6 +317,14 @@ export default function AlbumDetailPage() {
           </div>
         </div>
       </div>
+      {album && (
+        <EditAlbumModal
+          isOpen={editOpen}
+          onClose={() => setEditOpen(false)}
+          album={album}
+          onSave={handleSave}
+        />
+      )}
     </div>
   )
 }
