@@ -93,7 +93,7 @@ export default function SortFilter({ sort, filter, albums, onSortChange, onFilte
     <div className="flex items-end gap-10">
       {/* Sort */}
       <div>
-        <label className="font-mono text-[9px] text-warm-400 tracking-[0.08em] block mb-2">sort</label>
+        <label className="font-mono text-[9px] text-warm-600 tracking-[0.08em] block mb-2">sort</label>
         <div className="relative flex items-center">
           <select
             value={sort}
@@ -113,7 +113,7 @@ export default function SortFilter({ sort, filter, albums, onSortChange, onFilte
 
       {/* Filter */}
       <div ref={containerRef} className="relative">
-        <label className="font-mono text-[9px] text-warm-400 tracking-[0.08em] block mb-2">filter</label>
+        <label className="font-mono text-[9px] text-warm-600 tracking-[0.08em] block mb-2">filter</label>
 
         {/* Mode toggle */}
         <div className="flex items-center gap-4 mb-2.5">

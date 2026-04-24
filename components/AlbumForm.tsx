@@ -4,6 +4,7 @@ import { Album } from '@/lib/types'
 import { generateId } from '@/lib/storage'
 import RatingInput from './RatingInput'
 import SpotifySearch, { SpotifyFill } from './SpotifySearch'
+import TrackAutocomplete from './TrackAutocomplete'
 
 interface AlbumFormProps {
   onSubmit: (album: Album) => void
@@ -11,7 +12,7 @@ interface AlbumFormProps {
   initialData?: Album
 }
 
-const label = 'font-mono text-[9px] tracking-[0.08em] text-warm-400 block mb-2'
+const label = 'font-mono text-[9px] tracking-[0.08em] text-warm-600 block mb-2'
 const input =
   'w-full font-mono text-[13px] bg-transparent border-b border-warm-200 focus:border-warm-700 focus:outline-none py-2 text-warm-800 placeholder:text-warm-300 transition-colors duration-200'
 
@@ -149,23 +150,32 @@ export default function AlbumForm({ onSubmit, onClose, initialData }: AlbumFormP
         {/* Favorite Song */}
         <div>
           <label className={label}>favorite song</label>
-          <input type="text" value={form.favoriteSong} onChange={(e) => set('favoriteSong', e.target.value)} className={input} placeholder="your favorite track" />
+          <TrackAutocomplete
+            value={form.favoriteSong}
+            onChange={(v) => set('favoriteSong', v)}
+            tracks={form.tracks}
+            excludes={form.runnersUp}
+            placeholder="your favorite track"
+            className={input}
+          />
         </div>
 
         {/* Runners Up */}
         <div>
           <label className={label}>runners up</label>
           <div className="flex gap-2">
-            <input
-              type="text"
+            <TrackAutocomplete
               value={runnerInput}
-              onChange={(e) => setRunnerInput(e.target.value)}
+              onChange={setRunnerInput}
+              onSelect={(v) => { set('runnersUp', [...form.runnersUp, v]); setRunnerInput('') }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') { e.preventDefault(); addRunner() }
                 if (e.key === ',') { e.preventDefault(); addRunner() }
               }}
-              className={`${input} flex-1`}
+              tracks={form.tracks}
+              excludes={[...form.runnersUp, form.favoriteSong].filter(Boolean)}
               placeholder="song name, press enter"
+              className={`${input} flex-1`}
             />
             <button type="button" onClick={addRunner} className="font-mono text-sm text-warm-400 hover:text-accent border-b border-warm-200 px-2 transition-colors duration-200">+</button>
           </div>

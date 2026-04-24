@@ -95,7 +95,7 @@ export default function SpotifySearch({ onSelect }: SpotifySearchProps) {
 
   return (
     <div ref={containerRef}>
-      <p className="font-mono text-[9px] tracking-[0.08em] text-warm-400 mb-2">
+      <p className="font-mono text-[9px] tracking-[0.08em] text-warm-600 mb-2">
         search spotify
       </p>
 

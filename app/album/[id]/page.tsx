@@ -193,7 +193,7 @@ export default function AlbumDetailPage() {
                 transition={{ duration: 0.6, delay: 0.24, ease: [0.25, 0.1, 0.25, 1] }}
                 className="mb-10"
               >
-                <p className="font-mono text-[9px] tracking-[0.1em] text-warm-400 mb-3">
+                <p className="font-mono text-[9px] tracking-[0.1em] text-warm-600 mb-3">
                   Rating
                 </p>
                 <div className="flex items-baseline gap-2">
@@ -211,7 +211,7 @@ export default function AlbumDetailPage() {
                   transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
                   className="mb-10"
                 >
-                  <p className="font-mono text-[9px] tracking-[0.1em] text-warm-400 mb-4">
+                  <p className="font-mono text-[9px] tracking-[0.1em] text-warm-600 mb-4">
                     Review
                   </p>
                   <p className="font-serif text-[17px] md:text-[18px] leading-[1.75] text-warm-700 max-w-[540px]">
@@ -227,7 +227,7 @@ export default function AlbumDetailPage() {
                   transition={{ duration: 0.55, delay: 0.36, ease: [0.25, 0.1, 0.25, 1] }}
                   className="mb-8"
                 >
-                  <p className="font-mono text-[9px] tracking-[0.1em] text-warm-400 mb-3">
+                  <p className="font-mono text-[9px] tracking-[0.1em] text-warm-600 mb-3">
                     Favorite
                   </p>
                   <div className="flex items-center gap-3">
@@ -243,7 +243,7 @@ export default function AlbumDetailPage() {
                   {...fadeUp}
                   transition={{ duration: 0.55, delay: 0.42, ease: [0.25, 0.1, 0.25, 1] }}
                 >
-                  <p className="font-mono text-[9px] tracking-[0.1em] text-warm-400 mb-3">
+                  <p className="font-mono text-[9px] tracking-[0.1em] text-warm-600 mb-3">
                     Highlights
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -266,7 +266,7 @@ export default function AlbumDetailPage() {
                   transition={{ duration: 0.55, delay: 0.48, ease: [0.25, 0.1, 0.25, 1] }}
                   className="mt-10 pt-8 border-t border-warm-200"
                 >
-                  <p className="font-mono text-[9px] tracking-[0.1em] text-warm-400 mb-5">
+                  <p className="font-mono text-[9px] tracking-[0.1em] text-warm-600 mb-5">
                     tracklist
                   </p>
                   <ol className="space-y-2">
@@ -277,7 +277,7 @@ export default function AlbumDetailPage() {
                       )
                       return (
                         <li key={i} className="flex items-center gap-4 group">
-                          <span className="font-mono text-[10px] text-warm-300 w-5 shrink-0 text-right tabular-nums">
+                          <span className="font-mono text-[10px] text-warm-500 w-5 shrink-0 text-right tabular-nums">
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span
@@ -285,7 +285,7 @@ export default function AlbumDetailPage() {
                               isFav
                                 ? 'text-accent'
                                 : isRunner
-                                ? 'text-warm-700'
+                                ? 'text-warm-900'
                                 : 'text-warm-500'
                             }`}
                           >
@@ -295,7 +295,7 @@ export default function AlbumDetailPage() {
                             <span className="font-mono text-[10px] text-accent shrink-0">♡</span>
                           )}
                           {isRunner && !isFav && (
-                            <span className="font-mono text-[10px] text-warm-400 shrink-0">·</span>
+                            <span className="font-mono text-[10px] text-warm-600 shrink-0">·</span>
                           )}
                         </li>
                       )
