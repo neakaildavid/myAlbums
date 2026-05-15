@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   try {
     const token = await getSpotifyToken()
     const res = await fetch(
-      `https://api.spotify.com/v1/search?q=${encodeURIComponent(q)}&type=album&limit=12`,
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(q)}&type=album&limit=8&market=US`,
       { headers: { Authorization: `Bearer ${token}` }, cache: 'no-store' }
     )
     if (!res.ok) return NextResponse.json({ albums: [] })
